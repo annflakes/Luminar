@@ -4,6 +4,8 @@ import 'package:co_2/test.dart';
 import 'package:co_2/education.dart';
 import 'package:co_2/practice.dart';
 import 'package:co_2/history_page.dart';
+import 'camera_view.dart';
+
 
 class HomePage extends StatelessWidget {
   @override
@@ -56,7 +58,7 @@ class HomePage extends StatelessWidget {
                         icon: Icons.camera,
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CameraScreen()),
+                          MaterialPageRoute(builder: (context) =>  ColorScanner()),
                         ),
                       ),
                       _buildFeatureCard(
@@ -94,8 +96,15 @@ class HomePage extends StatelessWidget {
                         context,
                         title: 'Real-Time Simulation',
                         icon: Icons.visibility,
-                        onTap: () {},
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ColorBlindnessSimulator(),
+                          ),
+                        ),
                       ),
+                    
+                      
                     ],
                   ),
                 ),

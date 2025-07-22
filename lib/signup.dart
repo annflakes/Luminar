@@ -1,6 +1,7 @@
-import 'package:co_2/home.dart';
 import 'package:flutter/material.dart';
+
 import 'package:co_2/sigin.dart';
+import 'database/user_database.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -8,20 +9,71 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+
+  Future<void> _signUp() async {
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
+
+    if (username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      _showDialog("Error", "All fields are required.");
+      return;
+    }
+
+    if (password != confirmPassword) {
+      _showDialog("Error", "Passwords do not match.");
+      return;
+    }
+
+    bool exists = await DatabaseHelper.instance.userExists(username);
+    if (exists) {
+      _showDialog("Error", "Username already exists. Try another.");
+      return;
+    }
+
+    bool isCreated = await DatabaseHelper.instance.createUser(username, password);
+    if (isCreated) {
+      _showDialog("Success", "Account created successfully. Please sign in.", isSignupSuccess: true);
+    } else {
+      _showDialog("Signup failed", "Please try again.");
+    }
+  }
+
+  void _showDialog(String title, String message, {bool isSignupSuccess = false}) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (isSignupSuccess) {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInScreen()));
+              }
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-           colors: [ Color(0xFF40E0D0),Color(0xFF2C2C2C)], // Gradient colors
+            colors: [Colors.teal.shade400, Colors.teal.shade900],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Center(
@@ -33,106 +85,45 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 Text(
                   "Create Your Account",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
-                SizedBox(height: 30),
-                _buildTextField("UserName", Icons.check, false),
-                _buildTextField("Email", Icons.check, false),
-                _buildPasswordField("Password", _obscurePassword, (value) {
+                SizedBox(height: 30), // Space below title
+                _buildTextField("UserName", Icons.person, _usernameController),
+                SizedBox(height: 15), // Space between fields
+                _buildPasswordField("Password", _passwordController, _obscurePassword, () {
                   setState(() {
                     _obscurePassword = !_obscurePassword;
                   });
                 }),
-                _buildPasswordField("Confirm Password", _obscureConfirmPassword, (value) {
+                SizedBox(height: 15), // Space between fields
+                _buildPasswordField("Confirm Password", _confirmPasswordController, _obscureConfirmPassword, () {
                   setState(() {
                     _obscureConfirmPassword = !_obscureConfirmPassword;
                   });
                 }),
-                SizedBox(height: 30),
+                SizedBox(height: 30), // Space before button
                 Center(
-                  child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );// TODO: Im  plement signup logic
-        },
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 80),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-        ).copyWith(
-          backgroundColor: MaterialStateProperty.all<Color>(
-            Colors.transparent,
-          ),
-        ),
-        child: Ink(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF40E0D0), Color(0xFF2C2C2C)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Container(
-            alignment: Alignment.center,
-            constraints: BoxConstraints(minWidth: 150, minHeight: 50),
-            child: Text(
-              "SIGN UP",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ),
-
-      SizedBox(height: 16), // Space between Sign Up and Sign In section
-
-      // Label: "If already have an account"
-      Text(
-        "If already have an account",
-        style: TextStyle(
-          fontSize: 14,
-          color: const Color.fromARGB(254, 252, 241, 241),
-        ),
-      ),
-
-      SizedBox(height: 8), // Small space between label and Sign In button
-
-      // Sign In Button
-      TextButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SignInScreen()),
-          );
-        },
-        child: Text(
-          "Sign In",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 239, 238, 238), // Match primary color
-          ),
-        ),
-      ),
-    ],
-  ),
-),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor: Colors.tealAccent,
+                    ),
+                    onPressed: _signUp,
+                    child: Text("SIGN UP", style: TextStyle(fontSize: 18, color: Colors.black)),
+                  ),
+                ),
+                SizedBox(height: 20), // Space before Sign In text
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInScreen()));
+                    },
+                    child: Text("Already have an account? Sign In", style: TextStyle(color: Colors.white70)),
+                  ),
+                ),
               ],
             ),
           ),
@@ -141,44 +132,41 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Widget _buildTextField(String label, IconData icon, bool isPassword) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: TextField(
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyle(color: const Color.fromARGB(255, 247, 247, 247), fontWeight: FontWeight.bold),
-          suffixIcon: Icon(icon, color: Colors.grey),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: const Color.fromARGB(255, 28, 183, 144)),
-          ),
+  Widget _buildTextField(String label, IconData icon, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.white70),
+        prefixIcon: Icon(icon, color: Colors.white70),
+        filled: true,
+        fillColor: Colors.white10,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
         ),
       ),
     );
   }
 
-  Widget _buildPasswordField(String label, bool obscureText, Function toggleVisibility) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: TextField(
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyle(color: const Color.fromARGB(255, 255, 253, 253), fontWeight: FontWeight.bold),
-          suffixIcon: IconButton(
-            icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility, color: Colors.grey),
-            onPressed: () => toggleVisibility(obscureText),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: const Color.fromARGB(255, 28, 183, 144)),
-          ),
+  Widget _buildPasswordField(String label, TextEditingController controller, bool obscureText, VoidCallback toggleVisibility) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.white70),
+        suffixIcon: IconButton(
+          icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility, color: Colors.white70),
+          onPressed: toggleVisibility,
+        ),
+        filled: true,
+        fillColor: Colors.white10,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
         ),
       ),
     );

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "326610929994",
+    "project_id": "firesetup-7dab3",
+    "storage_bucket": "firesetup-7dab3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326610929994:android:a0060fefbcc339bfcf59b3",
+        "android_client_info": {
+          "package_name": "com.example.co_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCveoi9D-cRrENnoTDN00wzLmIZ5Y7OD-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

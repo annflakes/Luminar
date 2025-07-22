@@ -1,10 +1,13 @@
 import 'package:co_2/splash.dart';
 import 'package:flutter/material.dart';
+import 'database/database_helper.dart';
 
 
 void main() {
   runApp( MyApp());
 }
+
+
 
 class MyApp extends StatelessWidget {
   @override
@@ -15,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         
       primaryColor: Color(0xFF40E0D0), // Turquoise
-      scaffoldBackgroundColor: Color(0xFF2C2C2C), // Soft Grey
+      scaffoldBackgroundColor: Color.fromARGB(255, 248, 247, 247), // Soft Grey
       textTheme: TextTheme(
         bodyLarge: TextStyle(color: Color(0xFFE0E0E0)), // Light Grey text
         bodyMedium: TextStyle(color: Color(0xFF2C2C2C)), // Dark Grey text

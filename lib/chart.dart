@@ -21,59 +21,75 @@ class ProgressChartPage extends StatelessWidget {
             return Center(child: Text('No data available.'));
           }
 
-          // Prepare data for the chart
-          final barGroups = results
+          // Prepare data for the line chart (only marks for each test)
+          final List<FlSpot> marksSpots = results
               .asMap()
               .entries
               .map((entry) {
                 final index = entry.key;
                 final result = entry.value;
-                return BarChartGroupData(
-                  x: index,
-                  barRods: [
-                    BarChartRodData(
-                      toY: result.correctAnswers.toDouble(),
-                      color: Colors.green,
-                      width: 16,
-                    ),
-                    BarChartRodData(
-                      toY: result.incorrectAnswers.toDouble(),
-                      color: Colors.red,
-                      width: 16,
-                    ),
-                  ],
+                return FlSpot(
+                  index.toDouble(), // X-axis: Test serial number (implicit)
+                  result.correctAnswers.toDouble(), // Y-axis: Marks (correct answers)
                 );
               })
               .toList();
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: BarChart(
-              BarChartData(
-                barGroups: barGroups,
-                titlesData: FlTitlesData(
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: true),
+            child: Column(
+              children: [
+                // Chart Title
+                Text(
+                  'Marks in Each Test',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        final index = value.toInt();
-                        if (index >= 0 && index < results.length) {
-                          return Text(
-                            results[index].testType,
-                            style: TextStyle(fontSize: 10),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
+                ),
+                SizedBox(height: 16),
+                Expanded(
+                  child: LineChart(
+                    LineChartData(
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: marksSpots,
+                          isCurved: true,
+                          color: Colors.blue,
+                          barWidth: 4,
+                          belowBarData: BarAreaData(show: false),
+                          dotData: FlDotData(show: true),
+                        ),
+                      ],
+                      // Customize the axes
+                      titlesData: FlTitlesData(
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              return Text(
+                                value.toInt().toString(),
+                                style: TextStyle(fontSize: 12),
+                              );
+                            },
+                          ),
+                        ),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false), // Hide X-axis titles
+                        ),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                      ),
+                      borderData: FlBorderData(show: false),
+                      gridData: FlGridData(show: false),
                     ),
                   ),
                 ),
-                borderData: FlBorderData(show: false),
-                gridData: FlGridData(show: false),
-              ),
+              ],
             ),
           );
         },
