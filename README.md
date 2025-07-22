@@ -3,22 +3,28 @@ Luminar is a  mobile application designed to assist individuals with color visio
 
 ✨ Features
  
- Color Detection:
+ Color Detection
+ 
 Detect and display the color name of any object in real-time using the device camera.
 
- Color Blindness Testing:
+ Color Blindness Testing
+ 
 Built-in Ishihara plate-based test to help users identify their type and level of color blindness.
 
- Color Practice Mode:
+ Color Practice Mode
+ 
 A fun and interactive way for users to improve their color recognition skills.
 
- Educational Content:
+ Educational Content
+ 
 Learn about the causes, types (Protanopia, Deuteranopia, Tritanopia), and coping strategies for color blindness.
 
- History & Progress Tracking:
+ History & Progress Tracking
+ 
 Store and view your past test results and monitor improvement over time using simple charts.
 
- Real-Time Simulation:
+ Real-Time Simulation
+ 
 Simulate how the world looks to individuals with:
 
 Normal vision
@@ -28,6 +34,7 @@ Protanopia (Red color deficiency)
 Tritanopia (Blue color deficiency)
 
 🛠️ Built With
+
 Flutter – Cross-platform app development
 
 Sqflite – Local database to store test results and progress
@@ -37,6 +44,7 @@ Camera plugin – For real-time color detection
 Image/image_picker plugin – For test images and user interaction
 
 📱 Target Audience
+
 This app is designed for:
 
 Individuals with color vision deficiency
