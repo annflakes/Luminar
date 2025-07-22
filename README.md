@@ -56,4 +56,4 @@ Educators and researchers
 
 Anyone who wants to understand how color blindness affects perception
 
->>>>>>> 861fea15482b28dcfb731197e33fcadb7cb3e9af
+
