@@ -3,22 +3,22 @@ Luminar is a  mobile application designed to assist individuals with color visio
 
 ✨ Features
  
- Color Detection
+ Color Detection:
 Detect and display the color name of any object in real-time using the device camera.
 
- Color Blindness Testing
+ Color Blindness Testing:
 Built-in Ishihara plate-based test to help users identify their type and level of color blindness.
 
- Color Practice Mode
+ Color Practice Mode:
 A fun and interactive way for users to improve their color recognition skills.
 
- Educational Content
+ Educational Content:
 Learn about the causes, types (Protanopia, Deuteranopia, Tritanopia), and coping strategies for color blindness.
 
- History & Progress Tracking
+ History & Progress Tracking:
 Store and view your past test results and monitor improvement over time using simple charts.
 
- Real-Time Simulation
+ Real-Time Simulation:
 Simulate how the world looks to individuals with:
 
 Normal vision
