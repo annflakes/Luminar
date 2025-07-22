@@ -1,6 +1,6 @@
 import 'package:co_2/splash.dart';
 import 'package:flutter/material.dart';
-import 'database/database_helper.dart';
+
 
 
 void main() {
